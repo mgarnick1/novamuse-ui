@@ -18,7 +18,7 @@ export default function Header({
                 <img
                     src={logo}
                     alt="NovaMuse"
-                    className="h-8 w-8"
+                    className="h-8 w-8 rounded-full"
                 />
                 <span className="text-lg font-semibold tracking-tight">
                     NovaMuse
