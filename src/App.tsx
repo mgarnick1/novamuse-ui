@@ -1,24 +1,32 @@
-import { useState } from 'react'
+
 import './App.css'
 import Header from './components/Header.tsx';
 import RandomQuote from './components/RandomQuote.tsx';
-import type { User } from './interfaces/User.ts';
+
+import { useAuth } from "react-oidc-context";
 
 function App() {
-  const [user, setUser] = useState<User | undefined>();
+  const auth = useAuth();
+  
+  const signOutRedirect = () => {
+    const clientId = import.meta.env.VITE_CLIENT_ID;
+    const logoutUri = import.meta.env.MODE === "production" ? import.meta.env.VITE_APP_URL : "http://localhost:5173";
+    const cognitoDomain = "https://novamuse.auth.us-east-1.amazoncognito.com";
+    window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
+    auth.removeUser();
+  };
+
+  const signIn = () => {
+    auth.signinRedirect();
+  };
 
   return (
     <>
       <Header
-        user={user}
         onSignIn={() =>
-          setUser({
-            id: "1",
-            name: "Mark",
-            email: "mark@example.com",
-          })
+          signIn()
         }
-        onSignOut={() => setUser(undefined)}
+        onSignOut={() => signOutRedirect()}
       />
       <RandomQuote />
     </>

@@ -1,17 +1,17 @@
-import type { User } from "../interfaces/User.ts";
+import { useAuth } from "react-oidc-context";
 import logo from "../assets/novamusequotes.png";
 
 interface HeaderProps {
-    user?: User;
     onSignIn?: () => void;
     onSignOut?: () => void;
 }
 
 export default function Header({
-    user,
     onSignIn,
     onSignOut,
 }: HeaderProps) {
+    const auth = useAuth();
+    const user = auth.user;
     return (
         <header className="sticky top-0 z-50 border-b flex items-center justify-between px-6 py-4 border-b">
             <div className="flex items-center gap-2">
@@ -27,8 +27,8 @@ export default function Header({
             <div className="flex items-center gap-4">
                 {user ? (
                     <>
-                        <span className="text-sm text-gray-700">
-                            {user.name}
+                        <span className="text-sm font-medium">
+                            {user.profile.email}
                         </span>
 
                         <button
