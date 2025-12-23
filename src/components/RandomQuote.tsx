@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import type { Quote } from '../interfaces/Quote.ts';
+import AddQuoteModal from './AddQuoteModal.tsx';
 
 
 function RandomQuote() {
     const [quote, setQuote] = useState('');
     const [author, setAuthor] = useState('');
     const [source, setSource] = useState('');
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/quote`)
@@ -21,6 +23,21 @@ function RandomQuote() {
 
     return (
         <main className="container flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
+            <div className="flex w-full justify-end">
+                <button onClick={() => setOpen(!open)} className="p-2 border rounded-xl mb-4">Add Quote
+                </button>
+            </div>
+            {open && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div
+                        className="absolute inset-0 bg-gray-900/75 backdrop-blur-sm"
+                        onClick={() => setOpen(false)}
+                    />
+                    <div className="relative z-10 w-full max-w-md rounded-xl bg-black p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+                        <AddQuoteModal onClose={() => setOpen(false)} />
+                    </div>
+                </div>
+            )}
             <div className="relative p-6 border rounded-xl">
                 <p className="
                     text-4xl italic
