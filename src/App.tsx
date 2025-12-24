@@ -10,7 +10,7 @@ function App() {
   
   const signOutRedirect = () => {
     const clientId = import.meta.env.VITE_CLIENT_ID;
-    const logoutUri = import.meta.env.MODE === "production" ? import.meta.env.VITE_APP_URL : "http://localhost:5173";
+    const logoutUri = window.location.origin;
     const cognitoDomain = "https://novamuse.auth.us-east-1.amazoncognito.com";
     window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
     auth.removeUser();
@@ -19,7 +19,7 @@ function App() {
   const signIn = () => {
     auth.signinRedirect();
   };
-
+  console.log(import.meta.env.MODE);
   return (
     <>
       <Header
