@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import type { Quote } from '../interfaces/Quote.ts';
 import AddQuoteModal from './AddQuoteModal.tsx';
+import { useAuth } from 'react-oidc-context';
 
 
 function RandomQuote() {
+    const auth = useAuth();
+    const email = auth.user?.profile?.email;
     const [quote, setQuote] = useState('');
     const [author, setAuthor] = useState('');
     const [source, setSource] = useState('');
@@ -23,10 +26,10 @@ function RandomQuote() {
 
     return (
         <main className="container flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
-            <div className="flex w-full justify-end">
+            {email && <div className="flex w-full justify-end">
                 <button onClick={() => setOpen(!open)} className="p-2 border rounded-xl mb-4">Add Quote
                 </button>
-            </div>
+            </div>}
             {open && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center">
                     <div
