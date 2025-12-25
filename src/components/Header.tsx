@@ -13,7 +13,7 @@ export default function Header({
     const auth = useAuth();
     const user = auth.user;
     return (
-        <header className="sticky top-0 z-50 border-b flex items-center justify-between px-6 py-4 border-b">
+        <header className="sticky top-0 z-50 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-4 border-b">
             <div className="flex items-center gap-2">
                 <img
                     src={logo}
