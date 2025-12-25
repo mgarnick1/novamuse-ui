@@ -1,5 +1,6 @@
 import { useAuth } from "react-oidc-context";
 import logo from "../assets/novamusequotes.png";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface HeaderProps {
     onSignIn?: () => void;
@@ -11,10 +12,20 @@ export default function Header({
     onSignOut,
 }: HeaderProps) {
     const auth = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
     const user = auth.user;
+
+    const navigateHome = () => {
+        if (location.pathname === "/") {
+            window.location.reload();
+        } else {
+            navigate("/");
+        }
+    };
     return (
-        <header className="sticky top-0 z-50 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-4 border-b">
-            <div className="flex items-center gap-2">
+        <header className="sticky top-0 z-50 border-b bg-white dark:bg-gray-900 flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 py-4 border-b">
+            <div className="flex items-center gap-2 cursor-pointer select-none" onClick={navigateHome}>
                 <img
                     src={logo}
                     alt="NovaMuse"
