@@ -3,5 +3,10 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    // ... your existing options
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
+  },
+  "include": ["src", "src/**/*.test.ts", "src/**/*.test.tsx"]
 }

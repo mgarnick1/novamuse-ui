@@ -25,6 +25,10 @@ jobs:
             - name: Install dependencies
               run: yarn install --frozen-lockfile # Best practice in CI
 
+            - name: Run tests
+              run: yarn test:run  # Headless mode, fails workflow if tests fail
+              # Alternative: yarn test --run (if you don't have test:run script)
+
             - name: Build with Vite
               run: yarn build # Vite default script; outputs to 'dist/' by default
               env:
