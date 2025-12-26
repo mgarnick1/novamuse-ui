@@ -1,45 +1,50 @@
 name: Deploy to S3 + Invalidate CloudFront
 
 on:
-  push:
-    branches:
-      - main  # Change if your default branch is different
+    push:
+        branches:
+            - main # Change if your default branch is different
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read      # For checking out code
-      id-token: write     # Required for OIDC authentication
+    deploy:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read # For checking out code
+            id-token: write # Required for OIDC authentication
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'  # Or whatever version your project uses
-          cache: yarn  # This enables Yarn caching for faster installs
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22" # Or whatever version your project uses
+                  cache: yarn # This enables Yarn caching for faster installs
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile  # Best practice in CI
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile # Best practice in CI
 
-      - name: Build with Vite
-        run: yarn build  # Vite default script; outputs to 'dist/' by default
+            - name: Build with Vite
+              run: yarn build # Vite default script; outputs to 'dist/' by default
+              env:
+                  VITE_CLIENT_ID: ${{ secrets.VITE_CLIENT_ID }}
+                  VITE_API_URL: ${{ secrets.VITE_API_URL }}
+                  VITE_AUTH_URL: ${{secrets.VITE_AUTH_URL }}
+                  VITE_COGNITO_USERPOOL_ID: ${{secrets.VITE_COGNITO_USERPOOL_ID}}
 
-      - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: us-east-1  # Required for CloudFront; bucket can be in any region
+            - name: Configure AWS credentials (OIDC)
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+                  aws-region: us-east-1 # Required for CloudFront; bucket can be in any region
 
-      - name: Sync to S3
-        run: |
-          aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }} --delete --cache-control "max-age=31536000"
+            - name: Sync to S3
+              run: |
+                  aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }} --delete --cache-control "max-age=31536000"
 
-      - name: Invalidate CloudFront cache
-        run: |
-          aws cloudfront create-invalidation \
-            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-            --paths "/*"
+            - name: Invalidate CloudFront cache
+              run: |
+                  aws cloudfront create-invalidation \
+                    --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+                    --paths "/*"
