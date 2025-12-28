@@ -19,7 +19,7 @@ function App() {
   const signIn = () => {
     auth.signinRedirect();
   };
-  console.log(import.meta.env.MODE);
+
   return (
     <>
       <Header

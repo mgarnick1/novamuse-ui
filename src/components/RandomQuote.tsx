@@ -25,7 +25,7 @@ function RandomQuote() {
     }, []);
 
     return (
-        <main className="container bg-white dark:bg-gray-950 flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
+        <main className="container bg-black dark:bg-gray-950 flex flex-col items-center justify-center min-h-[calc(100vh-8rem)]">
             {email && <div className="flex w-full justify-end">
                 <button onClick={() => setOpen(!open)} className="p-2 border rounded-xl mb-4">Add Quote
                 </button>
