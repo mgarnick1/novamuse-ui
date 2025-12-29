@@ -6,6 +6,7 @@ import { AuthProvider } from "react-oidc-context";
 import { WebStorageStateStore } from 'oidc-client-ts';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthCallback } from './components/AuthCallback.tsx';
+import { Search } from './components/Search.tsx';
 
 
 const cognitoAuthConfig = {
@@ -29,6 +30,7 @@ createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/callback" element={<AuthCallback />} />
           <Route path="/*" element={<App />} />
+          <Route path="/search" element={<Search />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

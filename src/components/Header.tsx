@@ -35,6 +35,14 @@ export default function Header({
                     NovaMuse
                 </span>
             </div>
+            <nav className="flex items-center space-x-4">
+                <a
+                    href="/search"
+                    className="px-3 py-1 rounded hover:bg-indigo-500 transition"
+                >
+                    Search
+                </a>
+            </nav>
             <div className="flex items-center gap-4">
                 {user ? (
                     <>
