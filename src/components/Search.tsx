@@ -78,7 +78,7 @@ export const Search = () => {
                 {/* Filters */}
                 <div className="filters grid sm:grid-cols-2 gap-4">
                     <label className="block">
-                        <span className="text-gray-700 font-semibold">Author</span>
+                        <span className="font-semibold">Author</span>
                         <select
                             value={selectedAuthor}
                             onChange={(e) => setSelectedAuthor(e.target.value)}
@@ -96,7 +96,7 @@ export const Search = () => {
                     </label>
 
                     <label className="block">
-                        <span className="text-gray-700 font-semibold">Genre</span>
+                        <span className="font-semibold">Genre</span>
                         <select
                             value={selectedGenre}
                             onChange={(e) => setSelectedGenre(e.target.value)}
@@ -126,11 +126,11 @@ export const Search = () => {
                         {quotes.map((quote) => (
                             <div
                                 key={quote.quoteId}
-                                className="relative rounded-lg border bg-grey-900 p-4 shadow-sm hover:shadow-md transition"
+                                className="relative rounded-lg border bg-gray-900 p-4 shadow-sm hover:shadow-md transition"
                             >
-                                <p className="text-white italic">“{quote.text}”</p>
+                                <p className="italic">“{quote.text}”</p>
                                 {(quote.author || quote.genre) && (
-                                    <div className="mt-3 text-sm text-white-500">
+                                    <div className="mt-3 text-sm text-gray-300">
                                         {quote.author && <span>{quote.author}</span>}
                                         {quote.author && quote.genre && <span> · </span>}
                                         {quote.genre && <span>{quote.genre}</span>}

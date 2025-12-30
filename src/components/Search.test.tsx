@@ -270,4 +270,61 @@ describe('Search Component', () => {
 
         consoleErrorSpy.mockRestore();
     });
+
+    it('passes correct onSignIn and onSignOut handlers to Header', async () => {
+        const user = userEvent.setup();
+
+        // Get the mocked signOutRedirect function
+        const { signOutRedirect } = await import('../helpers/authHelpers.ts');
+
+        render(<Search />);
+
+        const signInButton = screen.getByText('Sign In');
+        const signOutButton = screen.getByText('Sign Out');
+
+        await user.click(signInButton);
+        // The signinRedirect is called through the useAuth hook, which is mocked
+        // We can't directly test it here without more complex mocking
+
+        await user.click(signOutButton);
+        expect(signOutRedirect).toHaveBeenCalled();
+    });
+
+    it('handles error when fetching authors and genres gracefully', async () => {
+        const consoleErrorSpy = vi
+            .spyOn(console, 'error')
+            .mockImplementation(() => { });
+
+        // This clears EVERYTHING: call history AND queued implementations
+        vi.mocked(globalThis.fetch).mockReset();
+
+        // Now set up the two rejections for the exact calls made on mount
+        vi.mocked(globalThis.fetch)
+            .mockRejectedValueOnce(new Error('Failed to fetch authors'))
+            .mockRejectedValueOnce(new Error('Failed to fetch genres'));
+
+        render(<Search />);
+
+        // Wait for the catch block to be hit
+        await waitFor(() => {
+            expect(consoleErrorSpy).toHaveBeenCalledWith(
+                'Error fetching filters:',
+                expect.any(Error)
+            );
+        });
+
+        // Selects should still be rendered with only placeholder options
+        expect(screen.getByText('Select an author')).toBeInTheDocument();
+        expect(screen.getByText('Select a genre')).toBeInTheDocument();
+
+        // No mocked authors or genres should appear in the dropdowns
+        mockAuthors.forEach((author) => {
+            expect(screen.queryByText(author)).not.toBeInTheDocument();
+        });
+        mockGenres.forEach((genre) => {
+            expect(screen.queryByText(genre)).not.toBeInTheDocument();
+        });
+
+        consoleErrorSpy.mockRestore();
+    });
 });
