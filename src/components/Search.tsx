@@ -126,7 +126,7 @@ export const Search = () => {
                         {quotes.map((quote) => (
                             <div
                                 key={quote.quoteId}
-                                className="relative rounded-lg border bg-gray-900 p-4 shadow-sm hover:shadow-md transition"
+                                className="relative rounded-lg border p-4 shadow-sm hover:shadow-md transition"
                             >
                                 <p className="italic">“{quote.text}”</p>
                                 {(quote.author || quote.genre) && (
